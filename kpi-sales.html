@@ -1,0 +1,421 @@
+html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Team - Personal Branding Tracker</title>
+    <style>
+        :root {
+            --primary-yellow: #F5C400;
+            --bg-dark: #121212;
+            --card-dark: #1A1A1A;
+            --text-light: #F0F0F0;
+            --text-muted: #A0A0A0;
+            --border-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-yellow);
+            margin-bottom: 15px;
+        }
+
+        .card {
+            background-color: var(--card-dark);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-yellow);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .btn-bonus {
+            background-color: #ff5722;
+            color: white;
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-yellow);
+            width: 40px;
+        }
+
+        .info {
+            flex-grow: 1;
+        }
+
+        .name-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-yellow);
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge.active { background-color: #4CAF50; }
+        .badge.viral { background-color: #E91E63; }
+        .badge.lead { background-color: #2196F3; }
+
+        /* Progress Styles */
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .member-card {
+            background-color: var(--bg-dark);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .member-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .stat-row {
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-yellow);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .reset-btn {
+            background-color: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">
+        <h1>🏆 BRANDING MASTERS 🏆</h1>
+        <p style="color: var(--text-muted)">Hệ thống Gamification theo dõi KPI mạng xã hội Team Sales</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>➕ Nhập liệu hằng ngày</h2>
+            <div class="form-group">
+                <label>Thành viên:</label>
+                <select id="memberSelect">
+                    <option value="DŨNG">DŨNG</option>
+                    <option value="QUYÊN">QUYÊN</option>
+                    <option value="TRANG">TRANG</option>
+                    <option value="TRINH">TRINH</option>
+                    <option value="HẢI">HẢI</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Số Bài đăng/Story/Video (10đ/bài):</label>
+                <input type="number" id="postsInput" min="0" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Lượt tương tác (5đ/100 lượt):</label>
+                <input type="number" id="engInput" min="0" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Leads mang về (20đ/lead):</label>
+                <input type="number" id="leadsInput" min="0" value="0">
+            </div>
+
+            <button onclick="addMetrics()">🚀 Cập Nhật Điểm</button>
+            <button class="btn-bonus" onclick="awardTop1()">👑 Tặng 50đ (Top 1 Tuần)</button>
+            <button class="reset-btn" onclick="resetData()">Reset Tuần Mới</button>
+        </div>
+
+        <div>
+            <div class="card" style="margin-bottom: 20px;">
+                <h2>🏅 Bảng Xếp Hạng</h2>
+                <div id="leaderboard">
+                    </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Tiến Độ Tuần vs Mục Tiêu</h2>
+                <div class="progress-grid" id="progressArea">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Khởi tạo dữ liệu ban đầu
+        const defaultTeam = [
+            { name: "DŨNG", posts: 0, engagements: 0, leads: 0, bonus: 0 },
+            { name: "QUYÊN", posts: 0, engagements: 0, leads: 0, bonus: 0 },
+            { name: "TRANG", posts: 0, engagements: 0, leads: 0, bonus: 0 },
+            { name: "TRINH", posts: 0, engagements: 0, leads: 0, bonus: 0 },
+            { name: "HẢI", posts: 0, engagements: 0, leads: 0, bonus: 0 }
+        ];
+
+        let teamData = JSON.parse(localStorage.getItem('kpiSalesData')) || [...defaultTeam.map(m => ({...m}))];
+
+        const GOALS = { posts: 10, engagements: 500, leads: 5 };
+
+        function calculatePoints(member) {
+            // 1 bài = 10đ, 100 tương tác = 5đ (hay 1 tương tác = 0.05đ), 1 lead = 20đ
+            let points = (member.posts * 10) + (member.engagements * 0.05) + (member.leads * 20) + member.bonus;
+            return Math.floor(points); // Làm tròn điểm
+        }
+
+        function saveData() {
+            localStorage.setItem('kpiSalesData', JSON.stringify(teamData));
+        }
+
+        function updateUI() {
+            // Sắp xếp mảng theo điểm số giảm dần
+            teamData.sort((a, b) => calculatePoints(b) - calculatePoints(a));
+
+            const leaderboardEl = document.getElementById('leaderboard');
+            const progressEl = document.getElementById('progressArea');
+            
+            leaderboardEl.innerHTML = '';
+            progressEl.innerHTML = '';
+
+            teamData.forEach((member, index) => {
+                const score = calculatePoints(member);
+                
+                // Badges Logic
+                let badgesHTML = '';
+                if (member.posts >= GOALS.posts) badgesHTML += `<span class="badge active">📝 Chăm chỉ</span>`;
+                if (member.engagements >= GOALS.engagements) badgesHTML += `<span class="badge viral">🔥 Viral</span>`;
+                if (member.leads >= GOALS.leads) badgesHTML += `<span class="badge lead">🎯 Thợ săn Lead</span>`;
+                if (member.bonus > 0) badgesHTML += `<span class="badge" style="background:var(--primary-yellow);color:#000;">👑 Top 1</span>`;
+
+                // Render Leaderboard Row
+                leaderboardEl.innerHTML += `
+                    <div class="leaderboard-item">
+                        <div class="rank">#${index + 1}</div>
+                        <div class="info">
+                            <div class="name-score">
+                                <div class="name">${member.name}</div>
+                                <div class="score">${score} đ</div>
+                            </div>
+                            <div class="badges">
+                                ${badgesHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Progress Cards
+                const postPct = Math.min((member.posts / GOALS.posts) * 100, 100);
+                const engPct = Math.min((member.engagements / GOALS.engagements) * 100, 100);
+                const leadPct = Math.min((member.leads / GOALS.leads) * 100, 100);
+
+                progressEl.innerHTML += `
+                    <div class="member-card">
+                        <h3>${member.name}</h3>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Bài đăng (${member.posts}/${GOALS.posts})</span><span>${Math.round(postPct)}%</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${postPct}%"></div></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Tương tác (${member.engagements}/${GOALS.engagements})</span><span>${Math.round(engPct)}%</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${engPct}%"></div></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Leads (${member.leads}/${GOALS.leads})</span><span>${Math.round(leadPct)}%</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${leadPct}%"></div></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function addMetrics() {
+            const name = document.getElementById('memberSelect').value;
+            const p = parseInt(document.getElementById('postsInput').value) || 0;
+            const e = parseInt(document.getElementById('engInput').value) || 0;
+            const l = parseInt(document.getElementById('leadsInput').value) || 0;
+
+            if (p === 0 && e === 0 && l === 0) return alert("Vui lòng nhập ít nhất 1 chỉ số!");
+
+            const memberIndex = teamData.findIndex(m => m.name === name);
+            if (memberIndex !== -1) {
+                teamData[memberIndex].posts += p;
+                teamData[memberIndex].engagements += e;
+                teamData[memberIndex].leads += l;
+                
+                // Reset form
+                document.getElementById('postsInput').value = 0;
+                document.getElementById('engInput').value = 0;
+                document.getElementById('leadsInput').value = 0;
+
+                saveData();
+                updateUI();
+            }
+        }
+
+        function awardTop1() {
+            const name = document.getElementById('memberSelect').value;
+            const memberIndex = teamData.findIndex(m => m.name === name);
+            if (memberIndex !== -1) {
+                teamData[memberIndex].bonus += 50;
+                saveData();
+                updateUI();
+                alert(`Đã cộng 50 điểm thưởng Top 1 cho ${name}!`);
+            }
+        }
+
+        function resetData() {
+            if(confirm("Bạn có chắc chắn muốn làm mới toàn bộ dữ liệu cho tuần mới?")) {
+                teamData = [...defaultTeam.map(m => ({...m}))];
+                saveData();
+                updateUI();
+            }
+        }
+
+        // Khởi chạy lần đầu
+        updateUI();
+    </script>
+</body>
+</html>
